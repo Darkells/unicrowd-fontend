@@ -1,3 +1,4 @@
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { AppBar, Toolbar, Button, Box, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
@@ -104,17 +105,69 @@ const Navbar = () => {
                     display: 'flex',
                     gap: 2
                 }}>
-                    <Button 
-                        variant="contained" 
-                        sx={{ 
-                            bgcolor: '#000',
-                            '&:hover': {
-                                bgcolor: 'rgba(0, 0, 0, 0.8)'
-                            }
+                    <ConnectButton.Custom>
+                        {({
+                            account,
+                            chain,
+                            openAccountModal,
+                            openChainModal,
+                            openConnectModal,
+                            mounted,
+                        }) => {
+                            const ready = mounted
+                            const connected = ready && account && chain
+
+                            return (
+                                <Box>
+                                    {(() => {
+                                        if (!connected) {
+                                            return (
+                                                <Button 
+                                                    onClick={openConnectModal}
+                                                    variant="contained" 
+                                                    sx={{ 
+                                                        bgcolor: '#000',
+                                                        '&:hover': {
+                                                            bgcolor: 'rgba(0, 0, 0, 0.8)'
+                                                        }
+                                                    }}
+                                                >
+                                                    连接钱包
+                                                </Button>
+                                            )
+                                        }
+
+                                        return (
+                                            <Box sx={{ display: 'flex', gap: 1 }}>
+                                                <Button
+                                                    onClick={openChainModal}
+                                                    variant="outlined"
+                                                    sx={{ 
+                                                        borderColor: '#000',
+                                                        color: '#000'
+                                                    }}
+                                                >
+                                                    {chain.name}
+                                                </Button>
+                                                <Button
+                                                    onClick={openAccountModal}
+                                                    variant="contained"
+                                                    sx={{ 
+                                                        bgcolor: '#000',
+                                                        '&:hover': {
+                                                            bgcolor: 'rgba(0, 0, 0, 0.8)'
+                                                        }
+                                                    }}
+                                                >
+                                                    {account.displayName}
+                                                </Button>
+                                            </Box>
+                                        )
+                                    })()}
+                                </Box>
+                            )
                         }}
-                    >
-                        连接钱包
-                    </Button>
+                    </ConnectButton.Custom>
                 </Box>
             </Toolbar>
         </AppBar>
